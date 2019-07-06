@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 import os
 
 
@@ -41,7 +41,7 @@ def page(file):
     try:
         return render_template('/projects/' + file + '/index.html')
     except:
-        return render_template('/projects/' + project + folder + file)
+        return open('templates/projects/' + project + folder + file, 'rb').read()
 
 
 @app.route('/')
