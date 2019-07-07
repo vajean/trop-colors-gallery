@@ -2,7 +2,7 @@
 
 A simple google app engine gallery for interactive canvases, animations.
 
-Each project gets its own `/project_name` url without revealing the projects structure.
+Each project gets its own `/project_name` url without revealing the site structure.
 
 Just copy your project / animation in
 `/templates/projects/[new_project_name]`. See below the structure needed.
@@ -14,15 +14,10 @@ Just copy your project / animation in
 
 * **must** have `index.html` in root project folder `/`
 
-* **must** have `thumb.png` in `/img` folder
+* **must** have `thumb.png` and `flavicon.ico` in `/somefolder` or `/` folder
 
-* all *image* files in `/img` folder
+* *image*, *javascript*, *css*  files in `/respective_folders` or `/` folder - though the former is recommended for good housekeeping 
 
-* all *javascript* files in `/js`folder
-
-* all *css* files in `/css` folder
-
-* *other* resources in `/other` folder
 
 
 After a folder has been added in the `/templates/project/[your_project]`
