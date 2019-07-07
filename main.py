@@ -25,7 +25,8 @@ def checkSubfolder(folder):
         'jpg': 'img/',
         'jpeg': 'img/',
         'png': 'img/',
-        'css': 'style/'
+        'css': 'style/',
+        'ico': ''
     }
     return ext.get(folder, 'other/')
 
@@ -33,15 +34,26 @@ def checkSubfolder(folder):
 app = Flask(__name__, static_folder='templates')
 
 
-@app.route('/<file>', methods=['GET'])
-def page(file):
-    project = str(request.referrer).split('/').pop() + '/'
-    folder = checkSubfolder(str(file).split('.').pop())
-
+@app.route('/<folder>', methods=['GET'])
+def page(folder):
+    project = str(request.referrer).split('/').pop()
     try:
-        return render_template('/projects/' + file + '/index.html')
+        return render_template('/projects/' + folder + '/index.html')
     except:
-        return open('templates/projects/' + project + folder + file, 'rb').read()
+        return open('templates/projects/' + project + '/' + folder, 'rb').read()
+
+
+@app.route('/<folder>/<file>', methods=['GET'])
+def resouce(folder, file):
+    project = str(request.referrer).split('/').pop()
+    if project:
+        project = '/' + project
+    if folder:
+        folder = '/' + folder
+    if file:
+        file = '/' + file
+
+    return open('templates/projects' + project + folder + file, 'rb').read()
 
 
 @app.route('/')
