@@ -24,8 +24,10 @@ def getFiles(projects, blobs):
     for blob in blobs:
         for project in projects:
             structure[project] = {}
+            index = 0
             for blob in blobs:
                 blob = blobList(blob)
                 if blob[2] == project:
-                    structure[project][blob[0]] = blob[1]
+                    structure[project][blob[0]] = [blob[1], index]
+                index += 1
     return structure

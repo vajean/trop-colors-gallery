@@ -13,10 +13,16 @@ structure = getFiles(projects, blobsList)
 app = Flask(__name__, static_folder='templates')
 
 
-@app.route('/<folder>', methods=['GET'])
-def page(folder):
-
-    return blobsList[2].download_as_string()
+@app.route('/<path:path>', methods=['GET'])
+def page(path):
+    requester = str(request.referrer).split('/').pop()
+    if requester != 'None':
+        print(type(path))
+        index = structure[requester][path.split('/').pop()][1]
+    else:
+        index = structure[path]['index.html'][1]
+    # return '<script>console.log(' + str(index) + ');</script>'
+    return blobsList[index].download_as_string()
 
 
 #@app.route('/')
