@@ -1,34 +1,13 @@
-import datetime
-from flask import Flask, render_template, request, url_for
-import os
+from flask import Flask, render_template, request, redirect
+from google.cloud import storage
+from bucket import getFiles, getProjects
 
-
-def getProjects():
-    basepath = 'templates/projects/'
-    projects = {}
-    project = {}
-    for entry in os.listdir(basepath):
-        if os.path.isdir(os.path.join(basepath, entry)):
-            for page in os.listdir(os.path.join(basepath, entry)):
-                if page == 'index.html':
-                    project = {
-                        'link': '/' + entry,
-                        'thumbSrc': '/templates/projects/' + entry + '/img/thumb.png'
-                    }
-                    projects[entry] = project
-    return projects
-
-
-def checkSubfolder(folder):
-    ext = {
-        'js': 'js/',
-        'jpg': 'img/',
-        'jpeg': 'img/',
-        'png': 'img/',
-        'css': 'style/',
-        'ico': ''
-    }
-    return ext.get(folder, 'other/')
+client = storage.Client()
+bucket = client.get_bucket('projects-bucket')
+blobs = bucket.list_blobs()
+blobsList = list(blobs)
+projects = getProjects(blobsList)
+structure = getFiles(projects, blobsList)
 
 
 app = Flask(__name__, static_folder='templates')
@@ -36,33 +15,17 @@ app = Flask(__name__, static_folder='templates')
 
 @app.route('/<folder>', methods=['GET'])
 def page(folder):
-    project = str(request.referrer).split('/').pop()
-    try:
-        return render_template('/projects/' + folder + '/index.html')
-    except:
-        return open('templates/projects/' + project + '/' + folder, 'rb').read()
+
+    return blobsList[2].download_as_string()
 
 
-@app.route('/<folder>/<file>', methods=['GET'])
-def resouce(folder, file):
-    project = str(request.referrer).split('/').pop()
-    if project:
-        project = '/' + project
-    if folder:
-        folder = '/' + folder
-    if file:
-        file = '/' + file
-
-    return open('templates/projects' + project + folder + file, 'rb').read()
-
-
-@app.route('/')
-def root():
+#@app.route('/')
+# def root():
     # For the sake of example, use static information to inflate the template.
     # This will be replaced with real information in later steps.
 
-    projects = getProjects()
-    return render_template('index.html', projects=projects)
+ #   projects=getProjects()
+  #  return render_template('index.html', projects = projects)
 
 
 if __name__ == '__main__':
