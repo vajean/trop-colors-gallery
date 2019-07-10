@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, render_template_string
 from google.cloud import storage
 from bucket import getFiles, getProjects
 
@@ -16,14 +16,15 @@ app = Flask(__name__, static_folder='templates')
 @app.route('/<path:path>', methods=['GET'])
 def page(path):
     requester = str(request.referrer).split('/').pop()
-    if requester != 'None':
-        print(type(path))
-        index = structure[requester][path.split('/').pop()][1]
+    if requester != 'None' and requester != '':
+        pathKey = path.split('/').pop()
+        index = structure[requester][pathKey][1]
     else:
         index = structure[path]['index.html'][1]
-    # return '<script>console.log(' + str(index) + ');</script>'
-    return blobsList[index].download_as_string()
+        template = blobsList[index].download_as_string()
+        return render_template_string(template.decode('utf-8'))
 
+    return blobsList[index].download_as_string()
 
 #@app.route('/')
 # def root():
