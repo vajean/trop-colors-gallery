@@ -57,13 +57,14 @@ div.desc {
 
 <h1 align="center">Colors</h1>
 
-{% for key, project in projects.items() %}
+{% for key, project in structure.items() %}
 <div class="responsive">
   <div class="gallery">
-    <a href="{{project['link']}}">
-      <img src="{{project['thumbSrc']}}" alt="{{key}}" width="300" height="300">
+    <a href="/{{key}}">
+      <img src="{{key}}{{project['thumb.png'][0]}}/thumb.png" alt="{{key}}" width="300" height="300">
     </a>
     <div class="desc">{{key}}</div>
+
   </div>
 </div>
 {% endfor %}
