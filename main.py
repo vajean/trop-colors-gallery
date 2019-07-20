@@ -41,6 +41,12 @@ def page(path):
 @app.route('/')
 def root():
 
+    client = storage.Client()
+    bucket = client.get_bucket('projects-bucket')
+    blobs = bucket.list_blobs()
+    blobsList = list(blobs)
+    projects = getProjects(blobsList)
+    structure = getFiles(projects, blobsList)
     return render_template('index.html', structure=structure)
 
 
